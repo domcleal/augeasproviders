@@ -19,25 +19,9 @@ wiki page.
 
 ## Using augeasproviders
 
-For builtin types, change the provider on individual resources to `augeas`:
-
-<pre>
-host { "example.com":
-  ensure   => present,
-  ip       => "10.1.2.3",
-  provider => "augeas",
-}
-</pre>
-
-Or change the [resource
-defaults](http://docs.puppetlabs.com/puppet/2.7/reference/lang_defaults.html)
-globally or in a single scope for the types needed from the list below:
-
-<pre>
-Host {
-  provider => "augeas",
-}
-</pre>
+For builtin types and mounttab, the default provider will automatically become
+the `augeas` provider once the module is installed.  This can be changed back
+to `parsed` where necessary.
 
 New types provided by augeasproviders can be used out of the box.  See the list
 below and `puppet doc -r type` output.
