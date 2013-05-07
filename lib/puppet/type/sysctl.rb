@@ -13,7 +13,7 @@ Puppet::Type.newtype(:sysctl) do
     isnamevar
   end
 
-  set_attr_alias(:val => :value) do
+  newproperty(:val) do
     desc "An alias for 'value'. Maintains compatibility with the traditional ParsedFile sysctl provider."
   end
 

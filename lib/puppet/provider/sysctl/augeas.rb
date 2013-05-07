@@ -85,6 +85,9 @@ Puppet::Type.type(:sysctl).provide(:augeas) do
   def create 
     aug = nil
     path = "/files#{self.class.file(resource)}"
+    if resource[:value].nil?
+      resource[:value] = resource[:val]
+    end
     begin
       aug = self.class.augopen(resource)
 
@@ -154,6 +157,9 @@ Puppet::Type.type(:sysctl).provide(:augeas) do
       aug.close if aug
     end
   end
+
+  alias_method :val, :value
+  alias_method :val=, :value=
 
   def comment
     aug = nil
