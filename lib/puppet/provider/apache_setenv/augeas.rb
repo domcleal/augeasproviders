@@ -82,10 +82,6 @@ Puppet::Type.type(:apache_setenv).provide(:augeas) do
     end
   end
 
-  def target
-    self.class.target(resource)
-  end
-
   def value
     augopen do |aug, path|
       paths = paths_from_name(aug, path)
