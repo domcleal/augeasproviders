@@ -49,6 +49,7 @@ module AugeasProviders::Provider
   end
 
   def augopen(resource = nil, &block)
+    resource = self.resource if resource.nil? && respond_to?(:resource)
     file = target(resource)
     loadpath ||= '/'
     aug = nil
