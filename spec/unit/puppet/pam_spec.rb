@@ -83,22 +83,23 @@ describe provider_class do
     end
 
     describe "when creating settings" do
-    it "should create simple new entry" do
-      apply!(Puppet::Type.type(:pam).new(
-        :service     => "system-auth-ac",
-        :type        => "auth",
-        :control     => "sufficient",
-        :module      => "pam_test.so",
-        :arguments   => "test_me_out",
-        :order       => "before module pam_deny.so",
-        :target      => target,
-        :provider    => "pam",
-        :ensure      => "present"
-      ))
+      it "should create simple new entry" do
+        apply!(Puppet::Type.type(:pam).new(
+          :service     => "system-auth-ac",
+          :type        => "auth",
+          :control     => "sufficient",
+          :module      => "pam_test.so",
+          :arguments   => "test_me_out",
+          :order       => "before module pam_deny.so",
+          :target      => target,
+          :provider    => "pam",
+          :ensure      => "present"
+        ))
 
-      aug_open(target, "Pam.lns") do |aug|
-        aug.get("./1/module").should == "pam_test.so"
-        aug.get("./1/module/argument[1]").should == "test_me_out"
+        aug_open(target, "Pam.lns") do |aug|
+          aug.get("./1/module").should == "pam_test.so"
+          aug.get("./1/module/argument[1]").should == "test_me_out"
+        end
       end
     end
 
@@ -141,6 +142,7 @@ describe provider_class do
     end
 
     describe "when removing settings" do
+      it "should delete a line" do 
         apply!(Puppet::Type.type(:pam).new(
           :service     => "system-auth-ac",
           :type        => "password",
