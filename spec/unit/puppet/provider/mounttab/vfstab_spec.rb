@@ -69,6 +69,56 @@ describe provider_class, :if => valid_lens? do
         }
       ')
     end
+
+    it "should create two new entries" do
+      apply!(
+        Puppet::Type.type(:mounttab).new(
+          :name     => "/foo",
+          :device   => "/dev/dsk/c1t1d1s1",
+          :blockdevice => "/dev/foo/c1t1d1s1",
+          :fstype   => "ufs",
+          :pass     => "2",
+          :atboot   => "yes",
+          :options  => [ "nosuid", "nodev" ],
+          :target   => target,
+          :provider => "augeas"
+        ),
+        Puppet::Type.type(:mounttab).new(
+          :name     => "/bar",
+          :device   => "/dev/dsk/c1t1d2s1",
+          :blockdevice => "/dev/foo/c1t1d2s1",
+          :fstype   => "ufs",
+          :pass     => "2",
+          :atboot   => "yes",
+          :options  => [ "nosuid", "nodev" ],
+          :target   => target,
+          :provider => "augeas"
+        ),
+      )
+
+      augparse(target, "Vfstab.lns", '
+        { "1"
+          { "spec" = "/dev/dsk/c1t1d1s1" }
+          { "fsck" = "/dev/foo/c1t1d1s1" }
+          { "file" = "/foo" }
+          { "vfstype" = "ufs" }
+          { "passno" = "2" }
+          { "atboot" = "yes" }
+          { "opt" = "nosuid" }
+          { "opt" = "nodev" }
+        }
+        { "2"
+          { "spec" = "/dev/dsk/c1t1d2s1" }
+          { "fsck" = "/dev/foo/c1t1d2s1" }
+          { "file" = "/bar" }
+          { "vfstype" = "ufs" }
+          { "passno" = "2" }
+          { "atboot" = "yes" }
+          { "opt" = "nosuid" }
+          { "opt" = "nodev" }
+        }
+      ')
+    end
   end
 
   context "with full vfstab file" do

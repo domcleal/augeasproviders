@@ -188,6 +188,24 @@ describe provider_class do
         subject.attr_aug_accessor(name, opts)
       end
     end
+
+    describe "#next_seq" do
+      it "should return 01 with no paths" do
+        subject.new.next_seq([]).should == '01'
+      end
+
+      it "should return 01 with only comments" do
+        subject.new.next_seq(['/files/etc/hosts/#comment[1]']).should == '01'
+      end
+
+      it "should return 02 when 01 exists" do
+        subject.new.next_seq(['/files/etc/hosts/01']).should == '02'
+      end
+
+      it "should return 042 when 01..041 exists" do
+        subject.new.next_seq((1..41).map {|n| "/files/etc/hosts/0#{n}"}).should == '042'
+      end
+    end
   end
 
   context "working provider" do

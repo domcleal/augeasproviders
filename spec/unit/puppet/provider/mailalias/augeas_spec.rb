@@ -33,6 +33,34 @@ describe provider_class do
       end
     end
 
+    it "should create two new entries" do
+      apply!(
+        Puppet::Type.type(:mailalias).new(
+          :name      => "foo",
+          :recipient => "bar",
+          :target    => target,
+          :provider  => "augeas"
+        ),
+        Puppet::Type.type(:mailalias).new(
+          :name      => "bar",
+          :recipient => "baz",
+          :target    => target,
+          :provider  => "augeas"
+        ),
+      )
+
+      augparse(target, "Aliases.lns", '
+         { "1"
+           { "name" = "foo" }
+           { "value" = "bar" }
+         }
+         { "2"
+           { "name" = "bar" }
+           { "value" = "baz" }
+         }
+      ')
+    end
+
     it "should create new entry" do
       apply!(Puppet::Type.type(:mailalias).new(
         :name      => "foo",

@@ -67,6 +67,39 @@ describe provider_class, :if => valid_lens? do
         ')
       end
 
+      it "should create two new entries" do
+        apply!(
+          Puppet::Type.type(:pg_hba).new(
+            :name     => "local to all on all",
+            :method   => "md5",
+            :target   => target,
+            :provider => "augeas"
+          ),
+          Puppet::Type.type(:pg_hba).new(
+            :name     => "host to all on all from 192.168.0.1",
+            :method   => "md5",
+            :target   => target,
+            :provider => "augeas"
+          ),
+        )
+
+        augparse(target, "Pg_hba.lns", '
+           { "1"
+             { "type" = "local" }
+             { "database" = "all" }
+             { "user" = "all" }
+             { "method" = "md5" }
+           }
+           { "2"
+             { "type" = "host" }
+             { "database" = "all" }
+             { "user" = "all" }
+             { "address" = "192.168.0.1" }
+             { "method" = "md5" }
+           }
+        ')
+      end
+
       context 'when specifying target in namevar' do
         it "should create simple new local entry" do
           apply!(Puppet::Type.type(:pg_hba).new(

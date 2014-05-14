@@ -104,6 +104,44 @@ describe provider_class do
         aug.get("./1/opt[1]").should == "defaults"
       end
     end
+
+    it "should create two new entries" do
+      apply!(
+        Puppet::Type.type(:mounttab).new(
+          :name     => "/mnt",
+          :device   => "/dev/myvg/mytest",
+          :fstype   => "ext4",
+          :target   => target,
+          :provider => "augeas"
+        ),
+        Puppet::Type.type(:mounttab).new(
+          :name     => "/mnt2",
+          :device   => "/dev/myvg/mysecond",
+          :fstype   => "ext4",
+          :target   => target,
+          :provider => "augeas"
+        ),
+      )
+
+      augparse(target, "Fstab.lns", '
+        { "1"
+          { "spec" = "/dev/myvg/mytest" }
+          { "file" = "/mnt" }
+          { "vfstype" = "ext4" }
+          { "opt" = "defaults" }
+          { "dump" = "0" }
+          { "passno" = "0" }
+        }
+        { "2"
+          { "spec" = "/dev/myvg/mysecond" }
+          { "file" = "/mnt2" }
+          { "vfstype" = "ext4" }
+          { "opt" = "defaults" }
+          { "dump" = "0" }
+          { "passno" = "0" }
+        }
+      ')
+    end
   end
 
   context "with full file" do

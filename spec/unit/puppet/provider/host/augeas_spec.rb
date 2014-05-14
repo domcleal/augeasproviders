@@ -61,6 +61,44 @@ describe provider_class do
         }
       ')
     end
+
+    it "should create two new entries" do
+      apply!(
+        Puppet::Type.type(:host).new(
+          :name     => "foo",
+          :ip       => "192.168.1.1",
+          :host_aliases => [ "foo-a", "foo-b" ],
+          :comment  => "test",
+          :target   => target,
+          :provider => "augeas"
+        ),
+        Puppet::Type.type(:host).new(
+          :name     => "bar",
+          :ip       => "192.168.1.2",
+          :host_aliases => [ "bar-a", "bar-b" ],
+          :comment  => "test",
+          :target   => target,
+          :provider => "augeas"
+        ),
+      )
+
+      augparse(target, "Hosts.lns", '
+        { "1"
+          { "ipaddr" = "192.168.1.1" }
+          { "canonical" = "foo" }
+          { "alias" = "foo-a" }
+          { "alias" = "foo-b" }
+          { "#comment" = "test" }
+        }
+        { "2"
+          { "ipaddr" = "192.168.1.2" }
+          { "canonical" = "bar" }
+          { "alias" = "bar-a" }
+          { "alias" = "bar-b" }
+          { "#comment" = "test" }
+        }
+      ')
+    end
   end
 
   context "with full file" do

@@ -914,4 +914,15 @@ Puppet::Type.type(:augeasprovider).provide(:default) do
   def flush
     augsave!(aug_handler, true) if supported?(:post_resource_eval)
   end
+
+  # Returns a node label to use for creating a new entry in an Augeas sequence
+  # (seq), given the current list, e.g. '01' if it's the first.  Supply
+  # aug.match('$target/*') or similar.
+  #
+  # @param [Array<String>] existing paths, from Augeas#match
+  # @return [String] new node label
+  def next_seq(matches)
+    last = matches.map {|p| p.split('/').last}.find_all {|p| p.start_with?('0')}.map(&:to_i).sort.last
+    '0' + ((last || 0) + 1).to_s
+  end
 end
