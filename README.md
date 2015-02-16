@@ -1,4 +1,26 @@
+# WARNING: this module is deprecated, replaced by herculesteam/augeasproviders
+
+Since the scope of this module had been steadily increasing, it has been split
+up into a series of more targeted modules and moved into the [Hercules
+Team](https://github.com/hercules-team/) organisation (home of Augeas itself).
+
+Therefore the domcleal/augeasproviders module is unmaintained and you should
+replace it with either:
+
+* [herculesteam/augeasproviders](https://forge.puppetlabs.com/herculesteam/augeasproviders)
+  which installs all of the modules, types and providers available.
+* One or more of the [herculesteam/augeasproviders_*](https://forge.puppetlabs.com/herculesteam/)
+  modules.  Each module provides a set of types and providers, e.g.
+  augeasproviders_postgresql ships pg_hba, and augeasproviders_ssh ships both
+  sshd_config and ssh_config.
+
+My thanks to everybody who's contributed to the module, and especially to
+[Raphaël Pinson](https://github.com/raphink) who has given it this new lease of
+life.
+
 # augeasproviders: alternative Augeas-based providers for Puppet
+
+## Original introduction
 
 This module provides alternative providers for core Puppet types such as
 `host` and `mailalias` using the Augeas configuration library.  It also adds
