@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.2.1
+
+- DEPRECATION WARNING: replaced by herculesteam/augeasproviders, see README for
+  more information
+
 ## 1.2.0
 
 - API
